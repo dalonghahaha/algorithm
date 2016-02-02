@@ -1,0 +1,114 @@
+<html>
+
+<head>
+    <script src="./libs/create.js"></script>
+    <script src="./source/MaxMatching.js"></script>
+    <script>
+    function init() {
+        var source = new createjs.Stage("sourceCanvas");
+        draw_boys(source);
+        draw_girls(source);
+        draw_edges(source);
+        source.update();
+        var matching = new createjs.Stage("matchingCanvas");
+        draw_boys(matching);
+        draw_girls(matching);
+        draw_matching(matching);
+        matching.update();
+        document.getElementById('max_match').innerText = max_match;
+    }
+
+    function draw_boys(stage) {
+        var circle = new createjs.Shape();
+        var radius = 28;
+        var margin_x = 20;
+        var margin_y = 20;
+        for (var i = 0; i < boys.length; i++) {
+
+            var circle = new createjs.Shape();
+            circle.graphics.setStrokeStyle(1).beginStroke("#FFF000").drawCircle(0, 0, radius);
+            circle.x = (2 * i + 1) * radius + (i + 1) * margin_y;
+            circle.y = radius + margin_x;
+
+            var text = new createjs.Text(boys[i], "10px Arial", "#ff7700");
+            text.x = (2 * i + 1) * radius + (i + 1) * margin_y - (text.getMeasuredWidth() / 2);
+            text.y = radius + margin_x
+            text.textBaseline = "middle";
+
+            stage.addChild(text);
+            stage.addChild(circle);
+
+            boys_points[i] = {
+                'x': (2 * i + 1) * radius + (i + 1) * margin_y,
+                'y': radius + margin_x
+            }
+        }
+    }
+
+    function draw_girls(stage) {
+        var circle = new createjs.Shape();
+        var radius = 28;
+        var margin_x = 20;
+        var margin_y = 20;
+        for (var i = 0; i < girls.length; i++) {
+
+            var circle = new createjs.Shape();
+            circle.graphics.setStrokeStyle(1).beginStroke("#FFF000").drawCircle(0, 0, radius);
+            circle.x = (2 * i + 1) * radius + (i + 1) * margin_y;
+            circle.y = radius + margin_x + 300;
+
+            var text = new createjs.Text(girls[i], "10px Arial", "#ff7700");
+            text.x = (2 * i + 1) * radius + (i + 1) * margin_y - (text.getMeasuredWidth() / 2);
+            text.y = radius + margin_x + 300;
+            text.textBaseline = "middle";
+
+            stage.addChild(text);
+            stage.addChild(circle);
+
+            girls_points[i] = {
+                'x': (2 * i + 1) * radius + (i + 1) * margin_y,
+                'y': radius + margin_x + 300
+            }
+        }
+    }
+
+    function draw_edges(stage){
+    	for (var i = 0; i < favorites.length; i++) {
+    		for (var j = 0; j < favorites[i].length; j++) {
+    			if(favorites[i][j]){
+    				draw_line(stage,boys_points[i], girls_points[j], '#000000');
+    			}
+    		};
+    	};
+    }
+
+    function draw_matching(stage){
+    	for (var i = 0; i < favorites.length; i++) {
+    		for (var j = 0; j < favorites[i].length; j++) {
+    			if(favorites[i][j]){
+    				if(match[j] !=null && match[j] == i){
+    					draw_line(stage,boys_points[match[j]], girls_points[j], 'red');
+    				}else {
+    					draw_line(stage,boys_points[i], girls_points[j], '#000000');
+    				}
+    			}
+    		};
+    	};
+    }
+
+    function draw_line(stage,from,to, color) {
+        var line = new createjs.Shape();
+        line.graphics.setStrokeStyle(1).beginStroke(color).moveTo(from.x, from.y).lineTo(to.x, to.y);
+        stage.addChild(line);
+    }
+    </script>
+</head>
+
+<body onload="init();">
+	<h3>二分图</h3>
+    <canvas id="sourceCanvas" width="800" height="400" style='border: 1px solid'></canvas>
+    <h3>最大匹配：<span id='max_match'></span></h3>
+	<canvas id="matchingCanvas" width="800" height="400" style='border: 1px solid'></canvas>
+</body>
+
+</html>
