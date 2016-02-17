@@ -18,8 +18,6 @@ while (!$finish) {
 
 $solution = get_solution($status_tree);
 
-echo count($solution)."个解决方案"."\r\n";
-
 output_solution($solution,$status_tree);
 
 function build_status_tree(&$status_tree,&$begin_index,&$finish){
@@ -123,6 +121,7 @@ function get_solution($status_tree){
 }
 
 function output_solution($solution,$status_tree) {
+	echo count($solution)."个解决方案"."\r\n";
 	foreach ($solution as $key => $value) {
 		echo "——————————————————————"."\r\n";
 		foreach($value as $status){
